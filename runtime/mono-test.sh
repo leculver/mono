@@ -32,6 +32,9 @@ if [ "$test_suite" = "--xunit" ]; then
             export LD_LIBRARY_PATH="$r:$LD_LIBRARY_PATH"
             export DYLD_LIBRARY_PATH="$r:$LD_LIBRARY_PATH"
             ;;
+        *"System.Net.Http"*)
+            export MONO_URI_DOTNETRELATIVEORABSOLUTE=true
+            ;;
     esac
     case "$(uname)" in
         "Darwin")
@@ -67,6 +70,9 @@ if [ "$test_suite" = "--nunit" ]; then
             sudo apt install -y xvfb xauth
             XVFBRUN="xvfb-run -a --"
             ADDITIONAL_TEST_EXCLUDES="NotWithXvfb" # TODO: find out why this works on Jenkins?
+            ;;
+        *"System.Net.Http"*)
+            export MONO_URI_DOTNETRELATIVEORABSOLUTE=true
             ;;
     esac
     case "$test_argument_2" in

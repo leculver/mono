@@ -1,4 +1,6 @@
+MartinTest.cs
 ../../test-helpers/NetworkHelpers.cs
+HttpClientTestHelpers.cs
 System.Net.Http/DelegatingHandlerTest.cs
 System.Net.Http/ByteArrayContentTest.cs
 System.Net.Http/FormUrlEncodedContentTest.cs
