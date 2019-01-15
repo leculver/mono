@@ -19,17 +19,12 @@ LIBRARY_WARN_AS_ERROR = yes
 EXTRA_DISTFILES = \
 	TestData/testservereku.contoso.com.pfx
 
-ifdef SOCKETSHTTPHANDLER
-socketshandlertests = FunctionalTests UnitTests
-else
-socketshandlertests =
+ifndef SOCKETSHTTPHANDLER
 TEST_MCS_FLAGS += -d:LEGACY_HTTPCLIENT
 LIB_MCS_FLAGS += -d:LEGACY_HTTPCLIENT
 endif
 
-SUBDIRS = $(socketshandlertests)
-
-DIST_SUBDIRS = FunctionalTests UnitTests
+SUBDIRS = FunctionalTests UnitTests
 
 include ../../build/library.make
 
