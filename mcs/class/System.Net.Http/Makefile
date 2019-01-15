@@ -19,8 +19,6 @@ LIBRARY_WARN_AS_ERROR = yes
 EXTRA_DISTFILES = \
 	TestData/testservereku.contoso.com.pfx
 
-DOTNET_URI = 1
-
 ifdef SOCKETSHTTPHANDLER
 socketshandlertests = FunctionalTests UnitTests
 else
@@ -34,6 +32,8 @@ SUBDIRS = $(socketshandlertests)
 DIST_SUBDIRS = FunctionalTests UnitTests
 
 include ../../build/library.make
+
+TEST_RUNTIME := MONO_URI_DOTNETRELATIVEORABSOLUTE=true $(TEST_RUNTIME)
 
 xunit-test-local: xunit-test-recursive
 
