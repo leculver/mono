@@ -71,9 +71,6 @@ if [ "$test_suite" = "--nunit" ]; then
             XVFBRUN="xvfb-run -a --"
             ADDITIONAL_TEST_EXCLUDES="NotWithXvfb" # TODO: find out why this works on Jenkins?
             ;;
-        *"System.Net.Http"*)
-            export MONO_URI_DOTNETRELATIVEORABSOLUTE=true
-            ;;
     esac
     case "$test_argument_2" in
         "--flaky-test-retries="*)
