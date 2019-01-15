@@ -362,6 +362,7 @@ namespace MonoTests.System.Net.Http
 		}
 
 		[Test]
+		[Category ("NotWorking")]
 		public void Send_BaseAddress ()
 		{
 			var mh = new HttpMessageHandlerMock ();
@@ -598,7 +599,8 @@ namespace MonoTests.System.Net.Http
 			}, port);
 
 			try {
-				var client = HttpClientTestHelpers.CreateHttpClient ();
+				var handler = HttpClientTestHelpers.CreateHttpClientHandler ();
+				var client = new HttpClient (handler);
 				var request = new HttpRequestMessage (HttpMethod.Get, $"http://localhost:{port}/");
 				Assert.IsTrue (request.Headers.TryAddWithoutValidation ("aa", "vv"), "#0");
 				var response = client.SendAsync (request, HttpCompletionOption.ResponseHeadersRead).Result;
@@ -626,7 +628,7 @@ namespace MonoTests.System.Net.Http
 				Assert.AreEqual ("w3.org", response.Headers.Location.OriginalString, "#107");
 
 				Assert.AreEqual ("test description", response.ReasonPhrase, "#110");
-				if (HttpClientTestHelpers.UsingSocketsHandler)
+				if (HttpClientTestHelpers.IsSocketsHandler (handler))
 					Assert.AreEqual (HttpVersion.Version10, response.Version, "#111");
 				else
 					Assert.AreEqual (HttpVersion.Version11, response.Version, "#111");
@@ -936,12 +938,13 @@ namespace MonoTests.System.Net.Http
 		void Send_Complete_NoContent (HttpMethod method)
 		{
 			bool? failed = null;
+			var handler = HttpClientTestHelpers.CreateHttpClientHandler ();
 			var port = NetworkHelpers.FindFreePort ();
 			var listener = CreateListener (l => {
 				try {
 					var request = l.Request;
 
-					if (HttpClientTestHelpers.UsingSocketsHandler) {
+					if (HttpClientTestHelpers.IsSocketsHandler (handler)) {
 						Assert.AreEqual (2, request.Headers.Count, "#1");
 						Assert.IsNull (request.Headers["Connection"], "#1c");
 					} else {
@@ -960,7 +963,7 @@ namespace MonoTests.System.Net.Http
 			}, port);
 
 			try {
-				var client = HttpClientTestHelpers.CreateHttpClient ();
+				var client = new HttpClient (handler);
 				var request = new HttpRequestMessage (method, $"http://localhost:{port}/");
 				var response = client.SendAsync (request, HttpCompletionOption.ResponseHeadersRead).Result;
 
@@ -1083,10 +1086,11 @@ namespace MonoTests.System.Net.Http
 		public void Send_Content_Put_CustomStream ()
 		{
 			bool passed = false;
+			var handler = HttpClientTestHelpers.CreateHttpClientHandler ();
 			var port = NetworkHelpers.FindFreePort ();
 			var listener = CreateListener (l => {
 				var request = l.Request;
-				if (HttpClientTestHelpers.UsingSocketsHandler)
+				if (HttpClientTestHelpers.IsSocketsHandler (handler))
 					passed = -1 == request.ContentLength64;
 				else
 					passed = 44 == request.ContentLength64;
@@ -1094,7 +1098,7 @@ namespace MonoTests.System.Net.Http
 			}, port);
 
 			try {
-				var client = HttpClientTestHelpers.CreateHttpClient ();
+				var client = new HttpClient (handler);
 				var r = new HttpRequestMessage (HttpMethod.Put, $"http://localhost:{port}/");
 				r.Content = new StreamContent (new CustomStream ());
 				var response = client.SendAsync (r).Result;

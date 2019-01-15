@@ -12,7 +12,6 @@ TEST_MCS_FLAGS = -d:WEBREQUEST_HANDLER
 TEST_LIB_REFS = System System.Core System.Net.Http System.Net.Http.WebRequest
 
 ifdef SOCKETSHTTPHANDLER
-DOTNET_URI = 1
 PROFILE_TEST_HARNESS_EXCLUDES = LegacyHttpClient,
 else
 socketshandlertests =

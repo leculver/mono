@@ -33,7 +33,7 @@ DIST_SUBDIRS = FunctionalTests UnitTests
 
 include ../../build/library.make
 
-TEST_RUNTIME := MONO_URI_DOTNETRELATIVEORABSOLUTE=true $(TEST_RUNTIME)
+# TEST_RUNTIME := MONO_URI_DOTNETRELATIVEORABSOLUTE=true $(TEST_RUNTIME)
 
 xunit-test-local: xunit-test-recursive
 
