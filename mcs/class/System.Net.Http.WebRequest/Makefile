@@ -11,11 +11,9 @@ LIB_MCS_FLAGS =
 TEST_MCS_FLAGS = -d:WEBREQUEST_HANDLER
 TEST_LIB_REFS = System System.Core System.Net.Http System.Net.Http.WebRequest
 
-ifdef SOCKETSHTTPHANDLER
-PROFILE_TEST_HARNESS_EXCLUDES = LegacyHttpClient,
-else
-socketshandlertests =
-PROFILE_TEST_HARNESS_EXCLUDES = SocketsHttpHandler,
+ifndef SOCKETSHTTPHANDLER
+TEST_MCS_FLAGS += -d:LEGACY_HTTPCLIENT
+LIB_MCS_FLAGS += -d:LEGACY_HTTPCLIENT
 endif
 
 include ../../build/library.make
